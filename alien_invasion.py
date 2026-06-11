@@ -157,7 +157,8 @@ class AlienInvasion:
         self.aliens.update()
         #删除已经消失的敌机
         for alien in self.aliens.copy():
-            if alien.rect.
+            if alien.rect.right<0 or alien.rect.left>600:
+                self.aliens.remove(alien)
 
 # 如果这个文件是“直接运行”的，而不是被导入
 if __name__ == "__main__":
