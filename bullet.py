@@ -18,6 +18,7 @@ class Bullet(Sprite):
 
         #存储用浮点数表示子弹的位置
         self.y=float(self.rect.y)
+        self.x=float(self.rect.x)
 
     def update(self):
         """向上移动子弹"""

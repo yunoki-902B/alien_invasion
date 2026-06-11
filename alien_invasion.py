@@ -55,7 +55,6 @@ class AlienInvasion:
             self._update_screen()
             #屏幕帧率
             self.clock.tick(self.settings.clock_tick)
-            print(len(self.aliens))
 
     def _update_screen(self):
         """更新屏幕图像 切换至新屏幕"""
@@ -134,6 +133,14 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <=0:
                 self.bullets.remove(bullet)
+        self._check_bullet_alien_collisions()
+        
+        
+    def _check_bullet_alien_collisions(self):
+        """响应子弹和敌机的碰撞"""
+        #删除发生碰撞的子弹和敌机
+        collisions=pygame.sprite.groupcollide(
+            self.bullets,self.aliens,True,True)
 
     def _create_fleet(self):
         """创建一个敌机舰队"""

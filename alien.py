@@ -33,7 +33,7 @@ class Alien(Sprite):
         if self.y<(140):
             self.y += self.settings.alien_speed
             self.rect.y=self.y
-        elif self.timer>160:
+        elif self.timer>300:
             if self.x<=300:
                 self.x-=self.settings.alien_speed
                 self.rect.x=self.x
