@@ -21,9 +21,8 @@ class GameState:
     def handle_event(self, event):
         return None
 
-    def update(self) -> None:
+    def update(self, dt: float = 0.0) -> None:
         return None
 
     def draw(self, screen):  # pragma: no cover - delegated rendering method
         return None
-

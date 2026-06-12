@@ -38,14 +38,17 @@ class AlienInvasion:
             return pygame.font.Font(None, size)
 
     def run_game(self):
+        max_frame_time = 0.1
         while True:
             self._check_events()
-            self.state.update()
+            delta_seconds = self.clock.tick(self.settings.clock_tick) / 1000.0
+            if delta_seconds > max_frame_time:
+                delta_seconds = max_frame_time
+            self.state.update(delta_seconds)
             self.state.draw(self.screen)
             pygame.display.flip()
             if self.pending_exit:
                 self._quit_game()
-            self.clock.tick(self.settings.clock_tick)
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -78,4 +81,3 @@ class AlienInvasion:
     def _quit_game(self):
         pygame.quit()
         sys.exit()
-

@@ -71,7 +71,7 @@ class LevelMenu:
                         diff_height,
                     ),
                     f"difficulty_{index}",
-                    enabled=(index == 0),
+                    enabled=True,
                 )
             )
 
