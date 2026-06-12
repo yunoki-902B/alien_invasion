@@ -6,10 +6,11 @@ from game.resources import resource_path
 class Alien(Sprite):
     """Represents a single alien."""
 
-    def __init__(self, ai_game):
+    def __init__(self, ai_game, behavior=None):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
+        self.behavior = behavior
 
         self.image = pygame.image.load(str(resource_path("image", "alien.png")))
         self.rect = self.image.get_rect()
@@ -22,6 +23,10 @@ class Alien(Sprite):
         self.timer = 0
 
     def update(self):
+        if self.behavior is not None:
+            self.behavior.update(self)
+            return
+
         self.timer += 1
         if self.y < 140:
             self.y += self.settings.alien_speed
