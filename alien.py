@@ -1,9 +1,10 @@
 import pygame
+from alien_bullet import AlienBullet
 from pygame.sprite import Sprite
-import time
 
 class Alien(Sprite):
     """表示单个敌机的类"""
+
     def __init__(self, ai_game):
         """初始化敌机并设置起始位置"""
         super().__init__()
@@ -27,16 +28,36 @@ class Alien(Sprite):
         #敌机计时器
         self.timer=0
 
+        #敌机开火计时器
+        self.fire_timer=0
+
+        #敌机意图控制
+        self.state=self.ENTERING
+
+        self.rect.y=self.y
+        self.rect.x=self.x
+
+        self.bullets=pygame.sprite.Group()
+
     def update(self):
-        """敌机移动"""
+        """敌机意图状态机"""
+        #入场-射击-离场
         self.timer+=1
+        if self.state==self.ENTERING:
+            self._update_entering()
+
+        if self.state==self.FIRERING:
+            self._update_firering()
+
+    def _update_entering(self):
+        """敌机移动"""
         if self.y<(140):
             self.y += self.settings.alien_speed
-            self.rect.y=self.y
-        elif self.timer>300:
-            if self.x<=300:
-                self.x-=self.settings.alien_speed
-                self.rect.x=self.x
-            else:
-                self.x+=self.settings.alien_speed
-                self.rect.x=self.x
+            self.state=self.FIRERING
+
+    def _update_firering(self):
+        """敌机射击"""
+        new_bullet=AlienBullet(self)
+        self.bullets.add(new_bullet)
+
+        
