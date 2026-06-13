@@ -1,6 +1,7 @@
 import pygame
 from alien_bullet import AlienBullet
 from pygame.sprite import Sprite
+import time
 
 class Alien(Sprite):
     """表示单个敌机的类"""
@@ -29,35 +30,73 @@ class Alien(Sprite):
         self.timer=0
 
         #敌机开火计时器
-        self.fire_timer=0
+        self.fire_timer=0.0
 
         #敌机意图控制
-        self.state=self.ENTERING
+        self.state="ENTERING"
+        self.fire=False
 
         self.rect.y=self.y
         self.rect.x=self.x
 
-        self.bullets=pygame.sprite.Group()
+        self.alien_bullets=pygame.sprite.Group()
 
     def update(self):
         """敌机意图状态机"""
         #入场-射击-离场
         self.timer+=1
-        if self.state==self.ENTERING:
+        if self.state=="ENTERING":
             self._update_entering()
 
-        if self.state==self.FIRERING:
+        elif self.state=="FIRERING":
             self._update_firering()
+        
+        elif self.state=="EXITING":
+            self._update_exitting()
 
     def _update_entering(self):
         """敌机移动"""
-        if self.y<(140):
+        if self.y<140:
             self.y += self.settings.alien_speed
-            self.state=self.FIRERING
+            self.state="FIRERING"
 
     def _update_firering(self):
         """敌机射击"""
+        self.fire=True
+        self._fire_alien_bullet
+        if self.timer<=600 and time.time() - self.fire_timer >= 0.5:
+            self._fire_alien_bullet()
+            self.fire_timer=time.time()
+        else:
+            self.state="EXITING"
+            self._update_alien_bullets
+
+    def _update_exiting(self):
+        self.rect.y=self.y
+        if self.timer>600:
+            if self.x<=300:
+                self.x-=self.settings.alien_speed
+                self.rect.x=self.x
+            else:
+                self.x+=self.settings.alien_speed
+                self.rect.x=self.x
+
+    def _fire_alien_bullet(self):
         new_bullet=AlienBullet(self)
         self.bullets.add(new_bullet)
 
-        
+    def _update_alien_bullets(self):
+        """更新子弹位置并删除已消失的子弹"""
+        #更新子弹位置
+        self.alien_bullets.update()
+        #删除已经消失的子弹
+        for bullet in self.alien_bullets.copy():
+            if bullet.rect.bottom <=0:
+                self.alien_bullets.remove(bullet)
+        self._check_bullet_player_collisions()
+
+    def _check_bullet_player_collisions(self):
+        """响应子弹和自机的碰撞"""
+        #删除发生碰撞的子弹和敌机
+        collisions=pygame.sprite.groupcollide(
+            self.alien_bullets,self.ship,True,True)

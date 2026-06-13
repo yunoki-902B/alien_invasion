@@ -115,7 +115,7 @@ class AlienInvasion:
             self.fire_pressed = False
 
     def _update_auto_fire(self):
-        """按住空格时持续发射子弹，避免卡死主循环。"""
+        """按住空格时持续发射子弹，避免卡死主循环"""
         if self.fire_pressed and time.time() - self.last_fire_time >= 0.1:
             self._fire_bullet()
             self.last_fire_time = time.time()
@@ -134,7 +134,6 @@ class AlienInvasion:
             if bullet.rect.bottom <=0:
                 self.bullets.remove(bullet)
         self._check_bullet_alien_collisions()
-        
         
     def _check_bullet_alien_collisions(self):
         """响应子弹和敌机的碰撞"""
