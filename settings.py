@@ -20,6 +20,6 @@ class Settings:
         self.alien_speed=2
         #敌机子弹设置
         self.alien_bullet_speed=8
-        self.alien_bullet_width=3
-        self.alien_bullet_height=3
+        self.alien_bullet_width=9
+        self.alien_bullet_height=9
         self.alien_bullet_color=(200,0,0)
