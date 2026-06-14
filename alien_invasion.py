@@ -5,6 +5,7 @@ from ship import Ship   #导入飞机
 from bullet import Bullet   #导入子弹
 import time
 from alien import Alien
+from alien_bullet import AlienBullet
 
 class AlienInvasion:
     """管理整个游戏的主类"""
@@ -33,6 +34,8 @@ class AlienInvasion:
         self.fire_pressed = False
         self.last_fire_time = 0.0
         self.aliens=pygame.sprite.Group()
+
+        self.alien_bullets=pygame.sprite.Group()
         
         self._create_fleet()
 
@@ -49,8 +52,12 @@ class AlienInvasion:
             self._update_auto_fire()
             #子弹删除函数
             self._update_bullets()
+            #敌机子弹函数
+            self._fire_alien_bullet()
             #敌机移动函数
             self._update_aliens()
+            #敌机子弹删除函数
+            self._update_alien_bullets()
             #更新函数
             self._update_screen()
             #屏幕帧率
@@ -62,6 +69,8 @@ class AlienInvasion:
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        for alien_bullet in self.alien_bullets.sprites():
+            alien_bullet.draw_alien_bullet()
         # 更新屏幕显示（让画面刷新）
         self.ship.blitme()
         #更新敌机
@@ -165,6 +174,30 @@ class AlienInvasion:
         for alien in self.aliens.copy():
             if alien.rect.right<0 or alien.rect.left>600:
                 self.aliens.remove(alien)
+    
+    def _fire_alien_bullet(self):
+        """敌机开火功能"""
+        for alien in self.aliens.sprites():
+            result = self.aliens.update()
+            if result == "FIRE":
+                new_bullet=AlienBullet(self,self.ship)
+                self.alien_bullets.add(new_bullet)
+
+    def _update_alien_bullets(self):
+        """更新敌机子弹位置并删除已消失的子弹"""
+        #更新子弹位置
+        self.alien_bullets.update()
+        #删除已经消失的子弹
+        for bullet in self.alien_bullets.copy():
+            if bullet.rect.bottom <=0 :
+                self.alien_bullets.remove(bullet)
+        self._check_bullet_player_collisions()
+
+    def _check_bullet_player_collisions(self):
+        """响应敌机子弹和自机的碰撞"""
+        #删除发生碰撞的子弹和敌机
+        collisions=pygame.sprite.groupcollide(
+            self.alien_bullets,self.ship,True,True)
 
 # 如果这个文件是“直接运行”的，而不是被导入
 if __name__ == "__main__":

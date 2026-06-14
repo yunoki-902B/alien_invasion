@@ -32,12 +32,11 @@ class AlienBullet(Sprite):
         #算出敌机和自机的向量
         #将向量转换为角度
         #角度乘以速度得出子弹飞行路径
-        dy=self.enemy_y-self.player_x
-        dx=self.enemy_x-self.player_x
+        dy=self.player_y-self.enemy_y
+        dx=self.player_x-self.enemy_x
         angle_radians=math.atan2(dy,dx)
-        angle_degress=math.degrees(angle_radians)
-        vx = math.cos(angle_degress) * self.settings.alien_bullet_speed
-        vy = math.sin(angle_degress) * self.settings.alien_bullet_speed
+        vx = math.cos(angle_radians) * self.settings.alien_bullet_speed
+        vy = math.sin(angle_radians) * self.settings.alien_bullet_speed
 
         self.x += vx
         self.y += vy
@@ -46,6 +45,6 @@ class AlienBullet(Sprite):
         self.rect.y=self.y
         self.rect.x=self.x
     
-    def draw_bullet(self):
+    def draw_alien_bullet(self):
         """在屏幕上绘制敌机子弹"""
         pygame.draw.rect(self.screen,self.alien_color,self.rect)
