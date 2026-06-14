@@ -39,33 +39,35 @@ class Alien(Sprite):
     def update(self):
         """敌机意图状态机"""
         #入场-射击-离场
-        self.timer+=1
-        if self.state=="ENTERING":
-            self._update_entering()
+        self.timer += 1
+        fire_signal = None
 
-        elif self.state=="FIRERING":
-            self._update_firering()
-            return self._update_firering()
-        
-        elif self.state=="EXITING":
+        if self.state == "ENTERING":
+            self._update_entering()
+        elif self.state == "FIRERING":
+            fire_signal = self._update_firering()
+        elif self.state == "EXITING":
             self._update_exiting()
 
-        self.rect.y=self.y
-        self.rect.x=self.x
+        self.rect.y = self.y
+        self.rect.x = self.x
+        return fire_signal
 
     def _update_entering(self):
         """敌机移动"""
         if self.y<140:
             self.y += self.settings.alien_speed
         else:
-            self.state="FIRERING"
+            self.state = "FIRERING"
+            self.fire_timer = time.time()
 
     def _update_firering(self):
         """敌机射击"""
-        self.fire=True
-        if self.timer<=450 and time.time() - self.fire_timer >= 0.5:
-            self.fire_timer=time.time() 
-            return "FIRE"
+        self.fire = True
+        if self.timer <= 450:
+            if time.time() - self.fire_timer >= 0.5:
+                self.fire_timer = time.time()
+                return "FIRE"
         else:
             self.state="EXITING"
 

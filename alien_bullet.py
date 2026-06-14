@@ -5,7 +5,7 @@ import math
 class AlienBullet(Sprite):
     """管理敌机所发射子弹的类"""
 
-    def __init__(self,ai_game):
+    def __init__(self, ai_game, alien):
         super().__init__()
         self.screen=ai_game.screen
         self.settings=ai_game.settings
@@ -14,14 +14,14 @@ class AlienBullet(Sprite):
         #在(0,0)处创建一个表示子弹的矩形，再设置正确的位置
         self.rect=pygame.Rect(0,0,self.settings.alien_bullet_width,
                               self.settings.alien_bullet_height)
-        self.rect.midbottom=ai_game.alien.rect.midbottom
+        self.rect.midbottom=alien.rect.midbottom
 
         #获取自机坐标
         self.player_x = ai_game.ship.rect.centerx
         self.player_y = ai_game.ship.rect.centery
 
-        self.enemy_x = ai_game.alien.rect.centerx
-        self.enemy_y = ai_game.alien.rect.centery
+        self.enemy_x = alien.rect.centerx
+        self.enemy_y = alien.rect.centery
 
         #存储用浮点数表示子弹的位置
         self.y=float(self.rect.y)
