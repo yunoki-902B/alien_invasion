@@ -108,6 +108,8 @@ class AlienInvasion:
             self.fire_pressed = True
             self._fire_bullet()
             self.last_fire_time = time.time()
+        elif event.key==pygame.K_LSHIFT:
+            self.settings.ship_speed=2
 
     def _check_keyup_event(self,event):
         """响应松开按键"""
@@ -121,6 +123,8 @@ class AlienInvasion:
             self.ship.moving_down=False
         elif event.key==pygame.K_SPACE:
             self.fire_pressed = False
+        elif event.key==pygame.K_LSHIFT:
+            self.settings.ship_speed=5
 
     def _update_auto_fire(self):
         """按住空格时持续发射子弹，避免卡死主循环"""
