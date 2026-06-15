@@ -50,3 +50,8 @@ class Ship(Sprite):
     def blitme(self):
         """在指定位置放置飞船"""
         self.screen.blit(self.image,self.rect)
+
+    def center_ship(self):
+        """将自机放置在屏幕底部的中央"""
+        self.rect.midbottom=self.screen_rect.midbottom
+        self.x=float(self.rect.x)

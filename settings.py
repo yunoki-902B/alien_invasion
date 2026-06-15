@@ -11,6 +11,7 @@ class Settings:
         self.clock_tick=60
         #飞机速度设置
         self.ship_speed=5
+        self.ship_limit=2
         #自机子弹设置
         self.bullet_speed=7
         self.bullet_width=3
